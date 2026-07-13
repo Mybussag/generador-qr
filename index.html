@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de QR</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f2f2f2;
+}
+
+.contenedor{
+    width:420px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0px 0px 15px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#0d6efd;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#084dbb;
+}
+
+#qrcode{
+    margin-top:25px;
+    display:flex;
+    justify-content:center;
+}
+
+#resultado{
+    margin-top:20px;
+    word-wrap:break-word;
+    font-size:13px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="contenedor">
+
+<h2>Registro</h2>
+
+<input id="ubicacion" placeholder="Ubicación">
+
+<input id="nombre" placeholder="Nombre">
+
+<input id="destino" placeholder="Destino">
+
+<input id="fecha" type="date">
+
+<button onclick="guardar()">Guardar</button>
+
+<div id="qrcode"></div>
+
+<div id="resultado"></div>
+
+</div>
+
+<script>
+
+function guardar(){
+
+document.getElementById("qrcode").innerHTML="";
+
+const datos={
+
+id:crypto.randomUUID(),
+
+ubicacion:document.getElementById("ubicacion").value,
+
+nombre:document.getElementById("nombre").value,
+
+destino:document.getElementById("destino").value,
+
+fecha:document.getElementById("fecha").value,
+
+fechaRegistro:new Date().toISOString()
+
+};
+
+const texto=JSON.stringify(datos);
+
+new QRCode(document.getElementById("qrcode"),{
+text:texto,
+width:250,
+height:250
+});
+
+document.getElementById("resultado").innerHTML=
+"<b>Contenido del QR:</b><br><br>"+texto;
+
+}
+
+</script>
+
+</body>
+</html>

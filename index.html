@@ -129,19 +129,19 @@ document.getElementById("compartir").style.display="block";
 }
 async function compartirQR(){
 
-const qr=document.querySelector("#qrcode img");
+const qr=document.querySelector("#qrcode canvas");
 
 if(!qr){
     alert("Primero genera un QR");
     return;
 }
 
-const respuesta=await fetch(qr.src);
-
-const archivo=await respuesta.blob();
+const imagenBlob = await new Promise(resolve => 
+    qr.toBlob(resolve, "image/png")
+);
 
 const imagen=new File(
-    [archivo],
+    [imagenBlob],
     "codigo-qr.png",
     {
         type:"image/png"

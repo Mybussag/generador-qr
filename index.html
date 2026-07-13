@@ -85,6 +85,10 @@ button:hover{
 
 <div id="resultado"></div>
 
+<button id="compartir" onclick="compartirQR()" style="display:none;">
+Compartir QR
+</button>
+
 </div>
 
 <script>
@@ -120,8 +124,49 @@ height:250
 document.getElementById("resultado").innerHTML=
 "<b>Contenido del QR:</b><br><br>"+texto;
 
+document.getElementById("compartir").style.display="block";
+
+}
+async function compartirQR(){
+
+const qr=document.querySelector("#qrcode img");
+
+if(!qr){
+    alert("Primero genera un QR");
+    return;
 }
 
+const respuesta=await fetch(qr.src);
+
+const archivo=await respuesta.blob();
+
+const imagen=new File(
+    [archivo],
+    "codigo-qr.png",
+    {
+        type:"image/png"
+    }
+);
+
+if(navigator.share){
+
+    await navigator.share({
+
+        title:"Código QR generado",
+
+        text:"Te comparto este código QR",
+
+        files:[imagen]
+
+    });
+
+}else{
+
+    alert("Tu dispositivo no permite compartir archivos directamente");
+
+}
+
+}
 </script>
 
 </body>

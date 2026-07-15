@@ -75,11 +75,11 @@ button:hover{
 
 <input id="nombre" placeholder="Nombre">
 
+<input id="telefono" placeholder="Número Telefónico" type="tel">
+
 <input id="destino" placeholder="Destino">
 
 <input id="fecha" type="date">
-
-<button onclick="guardar()">Guardar</button>
 
 <div id="qrcode"></div>
 
@@ -104,6 +104,8 @@ id:crypto.randomUUID(),
 ubicacion:document.getElementById("ubicacion").value,
 
 nombre:document.getElementById("nombre").value,
+
+telefono:document.getElementById("telefono").value,
 
 destino:document.getElementById("destino").value,
 

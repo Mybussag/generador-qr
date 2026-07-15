@@ -101,7 +101,7 @@ document.getElementById("qrcode").innerHTML="";
 
 const datos={
 
-id:crypto.randomUUID(),
+id: Date.now(),
 
 ubicacion:document.getElementById("ubicacion").value,
 
@@ -111,9 +111,7 @@ telefono:document.getElementById("telefono").value,
 
 destino:document.getElementById("destino").value,
 
-fecha:document.getElementById("fecha").value,
-
-fechaRegistro:new Date().toISOString()
+fecha:document.getElementById("fecha").value
 
 };
 
@@ -122,9 +120,10 @@ const texto=JSON.stringify(datos);
 console.log(texto);
 
 new QRCode(document.getElementById("qrcode"),{
-text:texto,
-width:250,
-height:250
+    text:texto,
+    width:250,
+    height:250,
+    correctLevel: QRCode.CorrectLevel.M
 });
 
 document.getElementById("resultado").innerHTML=

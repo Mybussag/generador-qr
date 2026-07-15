@@ -119,6 +119,8 @@ fechaRegistro:new Date().toISOString()
 
 const texto=JSON.stringify(datos);
 
+console.log(texto);
+
 new QRCode(document.getElementById("qrcode"),{
 text:texto,
 width:250,

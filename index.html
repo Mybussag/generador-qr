@@ -7,11 +7,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <style>
 
 body{
-    font-family:Arial;
-    background:#f2f2f2;
+    font-family: Arial;
+    background: white;
+    color: white;
+
 }
 
 .contenedor{
@@ -25,6 +30,8 @@ body{
 
 h2{
     text-align:center;
+    justify-content:center;
+    display:flex;
 }
 
 input{
@@ -48,6 +55,12 @@ button{
 
 button:hover{
     background:#084dbb;
+}
+
+#mapa{
+    height:300px;
+    margin-top:20px;
+    border-radius:10px;
 }
 
 #qrcode{
@@ -83,6 +96,8 @@ button:hover{
 
 <button onclick="guardar()">Guardar</button>
 
+<div id="mapa"></div>
+
 <div id="qrcode"></div>
 
 <div id="resultado"></div>
@@ -95,23 +110,87 @@ Compartir QR
 
 <script>
 
-function guardar(){
+let mapa;
+let marcador;
+let latitud = null;
+let longitud = null;
 
-document.getElementById("qrcode").innerHTML="";
+navigator.geolocation.watchPosition(
+
+function(pos){
+
+    latitud = pos.coords.latitude;
+    longitud = pos.coords.longitude;
+
+    if(!mapa){
+
+        mapa = L.map('mapa').setView([latitud,longitud],16);
+
+        L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution:'© OpenStreetMap'
+            }
+        ).addTo(mapa);
+
+        marcador = L.marker([latitud,longitud])
+        .addTo(mapa)
+        .bindPopup("Ubicación actual")
+        .openPopup();
+
+    }else{
+
+        marcador.setLatLng([latitud,longitud]);
+
+    }
+
+},
+
+function(error){
+
+    console.log("Error GPS:",error);
+
+},
+
+{
+    enableHighAccuracy:true,
+    maximumAge:0,
+    timeout:10000
+}
+
+);
+
+function guardar(){
+    
+    if(latitud === null || longitud === null){
+
+    alert("Esperando obtener ubicación GPS");
+
+    return;
+
+}
+
+    document.getElementById("qrcode").innerHTML="";
 
 const datos={
 
 id: Date.now(),
 
-ubicacion:document.getElementById("ubicacion").value,
+ubicacion: document.getElementById("ubicacion").value,
 
-nombre:document.getElementById("nombre").value,
+nombre: document.getElementById("nombre").value,
 
-telefono:document.getElementById("telefono").value,
+telefono: document.getElementById("telefono").value,
 
-destino:document.getElementById("destino").value,
+destino: document.getElementById("destino").value,
 
-fecha:document.getElementById("fecha").value
+fecha: document.getElementById("fecha").value,
+
+latitud: latitud,
+
+longitud: longitud,
+
+googleMaps: `https://www.google.com/maps?q=${latitud},${longitud}`
 
 };
 
